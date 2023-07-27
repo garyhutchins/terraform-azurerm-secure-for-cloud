@@ -19,7 +19,7 @@ module "infrastructure_resource_group" {
 module "infrastructure_eventhub" {
   source = "../../modules/infrastructure/eventhub"
 
-  subscription_ids             = local.threat_detection_subscription_ids
+  subscription_ids             = var.benchmark_subscription_ids
   location                     = var.location
   name                         = var.name
   tags                         = var.tags
@@ -31,7 +31,7 @@ module "infrastructure_eventgrid_eventhub" {
   count  = var.deploy_scanning ? 1 : 0
   source = "../../modules/infrastructure/eventhub"
 
-  subscription_ids          = local.threat_detection_subscription_ids
+  subscription_ids          = var.benchmark_subscription_ids
   location                  = var.location
   name                      = var.name
   tags                      = var.tags
@@ -55,10 +55,10 @@ module "infrastructure_enterprise_app" {
   source = "../../modules/infrastructure/enterprise_app"
 
   name             = var.name
-  subscription_ids = local.threat_detection_subscription_ids
+  subscription_ids = var.benchmark_subscription_ids
 }
 
-locals {
-  available_subscriptions           = data.azurerm_subscriptions.available.subscriptions
-  threat_detection_subscription_ids = length(var.threat_detection_subscription_ids) == 0 ? [for s in local.available_subscriptions : s.subscription_id if s.tenant_id == local.tenant_id] : var.threat_detection_subscription_ids
-}
+#locals {
+#  available_subscriptions           = data.azurerm_subscriptions.available.subscriptions
+#  threat_detection_subscription_ids = length(var.threat_detection_subscription_ids) == 0 ? [for s in local.available_subscriptions : s.subscription_id if s.tenant_id == local.tenant_id] : var.threat_detection_subscription_ids
+#}
